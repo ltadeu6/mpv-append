@@ -1,0 +1,11 @@
+#+title: Mpv-Append script
+
+* About
+
+This is a simple bash script to easily append files to the native mpv playlist.
+
+Based on [[https://markhuge.com/post/queue-media-in-mpv/][This Mark Wilkerson post]] and modernized to use mpv-socket protocol.
+Tested only on Linux
+
+** Requirements
+- [[http://www.dest-unreach.org/socat/][Socat]]

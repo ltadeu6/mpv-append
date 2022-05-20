@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+MPVSOCKET=/tmp/mpv-append-socket
+
+# See if MPV is already running
+if [ ! -e "${MPVSOCKET}" ]; then
+  # mpv is not running
+  /usr/bin/mpv --no-terminal --input-ipc-server="${MPVSOCKET}" "${1}" && rm "${MPVSOCKET}" &
+
+  # Wait for mpv to be up before moving on to adding anything else to playlist
+  while [ ! -e "${MPVSOCKET}" ]; do
+    sleep 1
+  done
+
+else
+  # mpv is running, so add stuff to playlist
+  echo "loadfile \"${1}\" append-play" | socat - "${MPVSOCKET}"
+fi
