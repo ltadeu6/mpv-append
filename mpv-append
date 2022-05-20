@@ -2,10 +2,17 @@
 
 MPVSOCKET=/tmp/mpv-append-socket
 
+# Fix freetube where $1 is empty
+if [ "$#" -eq 2 ]; then
+   video="$2"
+else
+   video="$1"
+fi
+
 # See if MPV is already running
 if [ ! -e "${MPVSOCKET}" ]; then
   # mpv is not running
-  /usr/bin/mpv --no-terminal --input-ipc-server="${MPVSOCKET}" "${1}" && rm "${MPVSOCKET}" &
+  /usr/bin/mpv --no-terminal --input-ipc-server="${MPVSOCKET}" "$video" && rm "${MPVSOCKET}" &
 
   # Wait for mpv to be up before moving on to adding anything else to playlist
   while [ ! -e "${MPVSOCKET}" ]; do
@@ -14,5 +21,5 @@ if [ ! -e "${MPVSOCKET}" ]; then
 
 else
   # mpv is running, so add stuff to playlist
-  echo "loadfile \"${1}\" append-play" | socat - "${MPVSOCKET}"
+  echo "loadfile \"$video\" append-play" | socat - "${MPVSOCKET}"
 fi
